@@ -1,8 +1,5 @@
-// src/App.tsx
-
 import { useState } from 'react';
-import Registro from './components/Registro'; // Componente de Registro
-// Importaciones futuras que debes crear:
+import Registro from './components/Registro';
 import Catalogo from './components/Catalogo'; 
 import Carrito from './components/Carrito';
 import PuntosLevelUp from './components/PuntosLevelUp'; 
@@ -11,12 +8,11 @@ import ComunidadSoporte from './components/ComunidadSoporte';
 
 import './App.css'; 
 
-// DEFINICIÓN DE TIPOS EXPORTABLES (NECESARIOS PARA EL CARRITO Y CATÁLOGO)
 export interface Producto {
   codigo: string;
   categoria: string;
   nombre: string;
-  precio: string; // Usamos string para mantener el formato CLP
+  precio: string;
   descripcion: string;
 }
 
@@ -25,39 +21,31 @@ export interface ItemCarrito extends Producto {
 }
 
 function App() {
-  // Estado básico del carrito
   const [carrito, setCarrito] = useState<ItemCarrito[]>([]); 
-  // Estado para la gamificación
-  const [puntosLevelUp] = useState(500); // Puntos iniciales simulados
+  const [puntosLevelUp] = useState(500); 
   
-  // Función para agregar o incrementar cantidad de un producto
   const agregarAlCarrito = (producto: Producto) => {
     setCarrito(prevCarrito => {
       const itemExistente = prevCarrito.find(item => item.codigo === producto.codigo);
 
       if (itemExistente) {
-        // Modificar: Incrementar cantidad si ya existe
         return prevCarrito.map(item =>
           item.codigo === producto.codigo
             ? { ...item, cantidad: item.cantidad + 1 }
             : item
         );
       } else {
-        // Agregar: Añadir nuevo ítem al carrito
         const nuevoItem: ItemCarrito = { ...producto, cantidad: 1 };
         return [...prevCarrito, nuevoItem];
       }
     });
   };
 
-  // Función para modificar la cantidad o eliminar un ítem
   const modificarCantidad = (codigo: string, nuevaCantidad: number) => {
     setCarrito(prevCarrito => {
       if (nuevaCantidad <= 0) {
-        // Eliminar: Si la cantidad es 0 o menos, se elimina el ítem
         return prevCarrito.filter(item => item.codigo !== codigo);
       } else {
-        // Modificar: Cambiar la cantidad
         return prevCarrito.map(item =>
           item.codigo === codigo
             ? { ...item, cantidad: nuevaCantidad }
@@ -93,7 +81,7 @@ function App() {
         {/* Carrito de Compras (Pasa el estado y la función para modificar) */}
         <Carrito carrito={carrito} onModificarCantidad={modificarCantidad} />
         
-        {/* Mostramos el componente de registro */}
+        {/* Componente de Registro de Usuarios */}
         <Registro />
         
       </main>
