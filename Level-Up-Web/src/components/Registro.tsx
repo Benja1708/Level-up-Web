@@ -1,143 +1,143 @@
-// src/components/Registro.tsx
+// __tests__/Registro.spec.tsx o Registro.test.tsx
 
-import React, { useState } from 'react';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import Registro from './Registro'; // Importación del componente en la misma carpeta// Helper para calcular una fecha de nacimiento válida (mayor de 18)
+// Calcula la fecha de hace 19 años
+const getValidBirthDate = (): string => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 19);
+  // Formato YYYY-MM-DD para el input type="date"
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
-// Tipos para el estado del formulario usando TypeScript
-interface FormData {
-  nombre: string;
-  email: string;
-  fechaNacimiento: string;
-  codigoReferido: string;
-}
+// Helper para calcular una fecha de nacimiento NO válida (menor de 18)
+// Calcula la fecha de hace 17 años
+const getInvalidBirthDate = (): string => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 17);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
-const PUNTOS_INICIALES = 100; 
-
-const Registro: React.FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    nombre: '',
-    email: '',
-    fechaNacimiento: '',
-    codigoReferido: '',
+  describe('Registro', () => {
+  // Configuración antes de cada prueba
+  beforeEach(() => {
+    // Renderizamos el componente antes de cada prueba (similar a setUp en otras librerías)
+    render(<Registro />);
   });
-  const [mensaje, setMensaje] = useState('');
-  const [tieneDescuento, setTieneDescuento] = useState(false);
+
+  // --- Pruebas de Renderizado e Inicialización ---
+  it('1. El componente debe renderizar correctamente y mostrar el título', () => {
+    // screen.getByText busca elementos por su texto.
+    expect(screen.getByText('Únete a Level-Up Gamer')).toBeInTheDocument();
+  });
+
+  // --- Pruebas de Lógica de Formulario ---
+  it('2. El estado del input de Nombre debe actualizarse correctamente', () => {
+    const nameInput = screen.getByPlaceholderText('Nombre Completo') as HTMLInputElement;
+    const testName = 'Alice Smith';
+
+    // Disparamos un evento de cambio
+    fireEvent.change(nameInput, { target: { value: testName } });
+
+    // Verificamos que el valor del input haya cambiado
+    expect(nameInput.value).toBe(testName);
+  });
+
+  it('3. Debe mostrar el mensaje de descuento para correos @duocuc.cl', () => {
+    const emailInput = screen.getByPlaceholderText(/correo@duocuc.cl/i);
+    
+    fireEvent.change(emailInput, { target: { value: 'test@duocuc.cl' } });
+
+    // Verifica que el mensaje de descuento esté visible
+    expect(screen.getByText(/¡Correo Duoc detectado! Descuento 20% de por vida aplicado./i)).toBeInTheDocument();
+  });
   
-  // Función para manejar los cambios en los inputs
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-
-    // Requisito: Verificar el correo de Duoc UC
-    if (name === 'email') {
-      const esDuoc = value.toLowerCase().endsWith('@duocuc.cl') || value.toLowerCase().endsWith('@alumnos.duoc.cl');
-      setTieneDescuento(esDuoc);
-    }
-  };
-
-  // Función para validar la edad (mayor de 18)
-  const validarEdad = (fechaStr: string): boolean => {
-    if (!fechaStr) return false;
-    const fechaNac = new Date(fechaStr);
-    const hoy = new Date();
-    let edad = hoy.getFullYear() - fechaNac.getFullYear();
-    const mes = hoy.getMonth() - fechaNac.getMonth();
+  it('4. Debe mostrar el mensaje de descuento para correos @alumnos.duoc.cl', () => {
+    const emailInput = screen.getByPlaceholderText(/correo@duocuc.cl/i);
     
-    if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
-      edad--;
-    }
-    return edad >= 18; // Requisito: solo usuarios mayores de 18 años
-  };
+    fireEvent.change(emailInput, { target: { value: 'test@alumnos.duoc.cl' } });
 
-  // Función que se ejecuta al enviar el formulario
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    // Verifica que el mensaje de descuento esté visible
+    expect(screen.getByText(/¡Correo Duoc detectado! Descuento 20% de por vida aplicado./i)).toBeInTheDocument();
+  });
 
-    if (!validarEdad(formData.fechaNacimiento)) {
-      setMensaje('❌ ¡Registro Fallido! Debes ser mayor de 18 años para registrarte.');
-      return;
-    }
+  // --- Pruebas de Validación de Edad ---
+  it('5. El registro debe FALLAR si el usuario es menor de 18 años', () => {
+    const submitButton = screen.getByRole('button', { name: /Registrarse/i });
     
-    let puntos = PUNTOS_INICIALES;
-    let mensajeReferido = '';
+    // 1. Ingresar una fecha de nacimiento NO válida
+    const dateInput = screen.getByLabelText('Fecha de Nacimiento:') as HTMLInputElement;
+    fireEvent.change(dateInput, { target: { value: getInvalidBirthDate() } });
 
-    // Requisito: Otorgar puntos LevelUp por código de referido
-    if (formData.codigoReferido) {
-        puntos += 500; // Puntos extra por usar un código (simulación)
-        mensajeReferido = ' ¡Y 500 Puntos LevelUp extra por tu código de referido!';
-    }
+    // 2. Intentar enviar el formulario
+    fireEvent.click(submitButton);
+
+    // 3. Verificar el mensaje de error
+    expect(screen.getByText(/❌ ¡Registro Fallido! Debes ser mayor de 18 años/i)).toBeInTheDocument();
+  });
+  
+  it('6. El registro debe ser EXITOSO si el usuario es mayor de 18 años', () => {
+    const submitButton = screen.getByRole('button', { name: /Registrarse/i });
     
-    const mensajeRegistro = tieneDescuento
-      ? `🎉 ¡Registro Exitoso! Tienes ${puntos} Puntos LevelUp y 20% de descuento por ser Duoc UC.${mensajeReferido}`
-      : `✅ ¡Registro Exitoso! Bienvenido/a a la comunidad Level-Up Gamer. Has ganado ${puntos} Puntos LevelUp.${mensajeReferido}`;
+    // 1. Llenar el formulario con datos válidos
+    fireEvent.change(screen.getByPlaceholderText('Nombre Completo'), { target: { value: 'Valid User' } });
+    fireEvent.change(screen.getByPlaceholderText(/correo@duocuc.cl/i), { target: { value: 'user@gmail.com' } });
+    const dateInput = screen.getByLabelText('Fecha de Nacimiento:') as HTMLInputElement;
+    fireEvent.change(dateInput, { target: { value: getValidBirthDate() } });
+
+    // 2. Intentar enviar el formulario
+    fireEvent.click(submitButton);
+
+    // 3. Verificar el mensaje de éxito (con 100 puntos iniciales)
+    // PUNTOS_INICIALES = 100
+    expect(screen.getByText(/✅ ¡Registro Exitoso! Bienvenido\/a a la comunidad Level-Up Gamer. Has ganado 100 Puntos LevelUp./i)).toBeInTheDocument();
+  });
+
+  // --- Pruebas de Casos de Éxito Combinados ---
+  it('7. El registro exitoso debe incluir puntos extra por código de referido', () => {
+    const submitButton = screen.getByRole('button', { name: /Registrarse/i });
     
-    setMensaje(mensajeRegistro);
-  };
+    // 1. Llenar el formulario
+    fireEvent.change(screen.getByPlaceholderText('Nombre Completo'), { target: { value: 'Ref User' } });
+    fireEvent.change(screen.getByPlaceholderText(/correo@duocuc.cl/i), { target: { value: 'user@hotmail.com' } });
+    const dateInput = screen.getByLabelText('Fecha de Nacimiento:') as HTMLInputElement;
+    fireEvent.change(dateInput, { target: { value: getValidBirthDate() } });
+    
+    // 2. Añadir código de referido
+    fireEvent.change(screen.getByPlaceholderText('Código de Referido (Opcional)'), { target: { value: 'XYZ123' } });
 
-  return (
-    <div style={{ padding: '20px', maxWidth: '400px', margin: '50px auto', border: '1px solid #1E90FF', borderRadius: '8px', backgroundColor: '#000000' }}>
-      <h2 style={{ fontFamily: 'Orbitron, sans-serif', color: '#39FF14' }}>Únete a Level-Up Gamer</h2>
-      <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '15px' }}>
-        
-        <input type="text" name="nombre" placeholder="Nombre Completo" value={formData.nombre} onChange={handleChange} required style={inputStyle} />
-        
-        <input type="email" name="email" placeholder="Correo Electrónico (ej: correo@duocuc.cl)" value={formData.email} onChange={handleChange} required style={inputStyle} />
-        {tieneDescuento && (
-          <p style={{ color: '#39FF14', margin: '0', fontSize: '14px' }}>
-            ¡Correo Duoc detectado! Descuento 20% de por vida aplicado.
-          </p>
-        )}
+    // 3. Enviar
+    fireEvent.click(submitButton);
 
-        <input 
-            type="text" 
-            name="codigoReferido" 
-            placeholder="Código de Referido (Opcional)" 
-            value={formData.codigoReferido} 
-            onChange={handleChange} 
-            style={inputStyle} 
-        />
-        
-        <label style={{ color: '#D3D3D3', fontSize: '14px' }}>Fecha de Nacimiento:</label>
-        <input type="date" name="fechaNacimiento" value={formData.fechaNacimiento} onChange={handleChange} required style={inputStyle} />
+    // 4. Verificar mensaje (100 iniciales + 500 referido = 600)
+    expect(screen.getByText(/Has ganado 600 Puntos LevelUp/i)).toBeInTheDocument();
+    expect(screen.getByText(/¡Y 500 Puntos LevelUp extra por tu código de referido!/i)).toBeInTheDocument();
+  });
 
-        <p style={{ color: '#D3D3D3', margin: '0', fontSize: '14px' }}>
-          *Debes ser mayor de 18 años para registrarte.
-        </p>
+  it('8. El registro debe incluir DESCUENTO Duoc y PUNTOS de Referido', () => {
+    const submitButton = screen.getByRole('button', { name: /Registrarse/i });
+    
+    // 1. Llenar el formulario
+    fireEvent.change(screen.getByPlaceholderText('Nombre Completo'), { target: { value: 'Duoc Ref User' } });
+    fireEvent.change(screen.getByPlaceholderText(/correo@duocuc.cl/i), { target: { value: 'alguno@duocuc.cl' } });
+    const dateInput = screen.getByLabelText('Fecha de Nacimiento:') as HTMLInputElement;
+    fireEvent.change(dateInput, { target: { value: getValidBirthDate() } });
+    
+    // 2. Añadir código de referido
+    fireEvent.change(screen.getByPlaceholderText('Código de Referido (Opcional)'), { target: { value: 'DUOCREF' } });
 
-        <button type="submit" style={buttonStyle}>
-          Registrarse
-        </button>
-      </form>
-      
-      {mensaje && (
-        <p style={{ marginTop: '20px', fontWeight: 'bold', color: mensaje.startsWith('❌') ? '#1E90FF' : '#39FF14' }}>
-          {mensaje}
-        </p>
-      )}
-    </div>
-  );
-};
+    // 3. Enviar
+    fireEvent.click(submitButton);
 
-// Estilos internos
-const inputStyle: React.CSSProperties = {
-  padding: '10px',
-  borderRadius: '4px',
-  border: '1px solid #1E90FF', 
-  backgroundColor: '#111', 
-  color: '#FFFFFF', 
-  fontFamily: 'Roboto, sans-serif', 
-};
-
-const buttonStyle: React.CSSProperties = {
-  padding: '10px',
-  borderRadius: '4px',
-  border: 'none',
-  backgroundColor: '#1E90FF', 
-  color: '#000000', 
-  fontWeight: 'bold',
-  cursor: 'pointer',
-  fontFamily: 'Orbitron, sans-serif',
-  transition: 'background-color 0.3s',
-};
-
-
-export default Registro;
+    // 4. Verificar mensaje (Debe ser el de Duoc y tener 600 puntos)
+    expect(screen.getByText(/🎉 ¡Registro Exitoso! Tienes 600 Puntos LevelUp y 20% de descuento por ser Duoc UC./i)).toBeInTheDocument();
+    expect(screen.getByText(/¡Y 500 Puntos LevelUp extra por tu código de referido!/i)).toBeInTheDocument();
+  });
+});
