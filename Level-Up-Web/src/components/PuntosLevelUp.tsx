@@ -2,7 +2,6 @@
 
 import React from 'react';
 
-// Simulación de los niveles de Gamificación
 interface Nivel {
     nombre: string;
     puntosRequeridos: number;
@@ -21,10 +20,8 @@ interface PuntosProps {
 }
 
 const PuntosLevelUp: React.FC<PuntosProps> = ({ puntosActuales }) => {
-    // Determinar el nivel actual del usuario
     const nivelActual = NIVELES.slice().reverse().find(n => puntosActuales >= n.puntosRequeridos) || NIVELES[0];
 
-    // Determinar el siguiente nivel
     const nivelesSuperiores = NIVELES.filter(n => n.puntosRequeridos > nivelActual.puntosRequeridos);
     const siguienteNivel = nivelesSuperiores.length > 0 ? nivelesSuperiores[0] : null;
 
@@ -58,7 +55,6 @@ const PuntosLevelUp: React.FC<PuntosProps> = ({ puntosActuales }) => {
     );
 };
 
-// Estilos internos
 const puntosStyle: React.CSSProperties = {
   maxWidth: '800px',
   margin: '20px auto',
@@ -80,7 +76,7 @@ const buttonStyle: React.CSSProperties = {
     padding: '8px 15px',
     borderRadius: '4px',
     border: 'none',
-    backgroundColor: '#39FF14', // Verde Neón para el canje
+    backgroundColor: '#39FF14',
     color: '#000000', 
     fontWeight: 'bold',
     cursor: 'pointer',

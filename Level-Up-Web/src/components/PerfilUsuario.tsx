@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 
-// Tipos para el estado del perfil
 interface PerfilData {
   nombre: string;
   email: string;
@@ -10,7 +9,6 @@ interface PerfilData {
   recibirNotificaciones: boolean;
 }
 
-// Datos simulados del usuario
 const initialProfile: PerfilData = {
   nombre: 'Gamer Legendario',
   email: 'gamer.legendario@alumnos.duoc.cl', 
@@ -21,14 +19,12 @@ const initialProfile: PerfilData = {
 const PerfilUsuario: React.FC = () => {
   const [perfil, setPerfil] = useState<PerfilData>(initialProfile);
   const [mensaje, setMensaje] = useState('');
-  
-  // La tienda ya sabe si tiene descuento Duoc por el email de registro
+
   const tieneDescuentoDuoc = perfil.email.toLowerCase().endsWith('@duocuc.cl') || perfil.email.toLowerCase().endsWith('@alumnos.duoc.cl');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
     
-    // Maneja los checkboxes de forma diferente
     const nuevoValor = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
 
     setPerfil(prev => ({
@@ -39,7 +35,6 @@ const PerfilUsuario: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la llamada a la API para guardar los datos
     setMensaje('✅ Perfil actualizado con éxito.');
   };
 
@@ -118,7 +113,6 @@ const PerfilUsuario: React.FC = () => {
   );
 };
 
-// Estilos internos
 const perfilStyle: React.CSSProperties = {
   maxWidth: '600px',
   margin: '20px auto',

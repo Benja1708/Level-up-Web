@@ -1,7 +1,6 @@
 // src/components/Carrito.tsx
 
 import React from 'react';
-// CORRECCIÓN: Usamos 'import type' para el tipo ItemCarrito exportado desde src/App.tsx
 import type { ItemCarrito } from '../App'; 
 
 interface CarritoProps {
@@ -9,25 +8,20 @@ interface CarritoProps {
   onModificarCantidad: (codigo: string, nuevaCantidad: number) => void;
 }
 
-// Función auxiliar para convertir el precio CLP de string a número entero
 const parseCLP = (precioStr: string): number => {
-  // Elimina el signo $ y los puntos de miles, luego convierte a número
   const limpio = precioStr.replace('$', '').replace(/\./g, '').replace(' CLP', '');
   return parseInt(limpio, 10) || 0;
 };
 
 const Carrito: React.FC<CarritoProps> = ({ carrito, onModificarCantidad }) => {
 
-  // Calcular el Total de la Compra (Requisito: Mostrar totales)
   const totalCompra = carrito.reduce((total, item) => {
     const precioUnitario = parseCLP(item.precio); 
     return total + (precioUnitario * item.cantidad);
   }, 0);
 
-  // Formatear el total a CLP con separadores de miles
   const totalFormateado = `$${totalCompra.toLocaleString('es-CL')} CLP`;
 
-  // Muestra el carrito
   return (
     <div style={carritoStyle}>
       <h2 style={{ fontFamily: 'Orbitron, sans-serif', color: '#39FF14', borderBottom: '2px solid #1E90FF', paddingBottom: '10px' }}>
@@ -53,13 +47,12 @@ const Carrito: React.FC<CarritoProps> = ({ carrito, onModificarCantidad }) => {
                   type="number"
                   min="0"
                   value={item.cantidad}
-                  // Modificar: Llama a la función para actualizar la cantidad
                   onChange={(e) => onModificarCantidad(item.codigo, parseInt(e.target.value))}
                   style={inputCantidadStyle}
                 />
                 <button
-                  onClick={() => onModificarCantidad(item.codigo, 0)} // Eliminar: Pasa cantidad 0
-                  style={{ ...buttonStyle, backgroundColor: '#FF4500' }} // Naranja (DarkOrange) para eliminar
+                  onClick={() => onModificarCantidad(item.codigo, 0)}
+                  style={{ ...buttonStyle, backgroundColor: '#FF4500' }} 
                 >
                   X
                 </button>
@@ -81,7 +74,6 @@ const Carrito: React.FC<CarritoProps> = ({ carrito, onModificarCantidad }) => {
   );
 };
 
-// Estilos internos
 const carritoStyle: React.CSSProperties = {
   maxWidth: '800px',
   margin: '20px auto',

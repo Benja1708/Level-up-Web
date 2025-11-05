@@ -1,15 +1,12 @@
 // src/components/Catalogo.tsx
 
 import React from 'react';
-// CORRECCIÓN: Usamos 'import type' para tipos, según la configuración de TypeScript (ts(1484))
 import type { Producto } from '../App'; 
 
-// Definición de las props que el Catálogo espera recibir
 interface CatalogoProps {
   onAgregarAlCarrito: (producto: Producto) => void;
 }
 
-// 2. Datos de los productos (basado en el detalle de productos del caso)
 const productos: Producto[] = [
   { codigo: "JM001", categoria: "Juegos de Mesa", nombre: "Catan", precio: "$29.990 CLP", descripcion: "Un clásico juego de estrategia donde los jugadores compiten por colonizar y expandirse en la isla de Catan." },
   { codigo: "JM002", categoria: "Juegos de Mesa", nombre: "Carcassonne", precio: "$24.990 CLP", descripcion: "Un juego de colocación de fichas donde los jugadores construyen el paisaje alrededor de la fortaleza medieval de Carcassonne. Fácil de aprender." },
@@ -22,10 +19,8 @@ const productos: Producto[] = [
   { codigo: "PP001", categoria: "Poleras Personalizadas", nombre: "Polera Gamer Personalizada 'Level-Up'", precio: "$14.990 CLP", descripcion: "Una camiseta cómoda y estilizada, con la posibilidad de personalizarla con tu gamer tag o diseño favorito." },
 ];
 
-// 3. Componente principal del Catálogo
 const Catalogo: React.FC<CatalogoProps> = ({ onAgregarAlCarrito }) => {
   
-  // Agrupamos los productos por categoría
   const categorias = productos.reduce((acc, producto) => {
     const key = producto.categoria;
     if (!acc[key]) {
@@ -80,7 +75,6 @@ const Catalogo: React.FC<CatalogoProps> = ({ onAgregarAlCarrito }) => {
   );
 };
 
-// Estilos internos
 const catalogoStyle: React.CSSProperties = {
   maxWidth: '1200px',
   margin: '50px auto',

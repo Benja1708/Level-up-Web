@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 
-// Tipos para el estado del formulario usando TypeScript
 interface FormData {
   nombre: string;
   email: string;
@@ -22,19 +21,16 @@ const Registro: React.FC = () => {
   const [mensaje, setMensaje] = useState('');
   const [tieneDescuento, setTieneDescuento] = useState(false);
   
-  // Función para manejar los cambios en los inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    // Requisito: Verificar el correo de Duoc UC
     if (name === 'email') {
       const esDuoc = value.toLowerCase().endsWith('@duocuc.cl') || value.toLowerCase().endsWith('@alumnos.duoc.cl');
       setTieneDescuento(esDuoc);
     }
   };
 
-  // Función para validar la edad (mayor de 18)
   const validarEdad = (fechaStr: string): boolean => {
     if (!fechaStr) return false;
     const fechaNac = new Date(fechaStr);
@@ -45,10 +41,9 @@ const Registro: React.FC = () => {
     if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
       edad--;
     }
-    return edad >= 18; // Requisito: solo usuarios mayores de 18 años
+    return edad >= 18; 
   };
 
-  // Función que se ejecuta al enviar el formulario
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -60,9 +55,8 @@ const Registro: React.FC = () => {
     let puntos = PUNTOS_INICIALES;
     let mensajeReferido = '';
 
-    // Requisito: Otorgar puntos LevelUp por código de referido
     if (formData.codigoReferido) {
-        puntos += 500; // Puntos extra por usar un código (simulación)
+        puntos += 500; 
         mensajeReferido = ' ¡Y 500 Puntos LevelUp extra por tu código de referido!';
     }
     
@@ -117,7 +111,6 @@ const Registro: React.FC = () => {
   );
 };
 
-// Estilos internos
 const inputStyle: React.CSSProperties = {
   padding: '10px',
   borderRadius: '4px',

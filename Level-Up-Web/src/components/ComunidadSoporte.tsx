@@ -4,14 +4,12 @@ import React from 'react';
 
 const ComunidadSoporte: React.FC = () => {
 
-  // Simulación de los artículos del blog (Contenido Educativo y de Comunidad)
   const noticias = [
     { id: 1, titulo: "Mejora tu FPS: Guía de optimización de PC Gamer", autor: "LevelUp Pro", fecha: "25/10/2025" },
     { id: 2, titulo: "¿Cómo elegir tu primera silla gamer?", autor: "Duoc UC Gaming", fecha: "18/10/2025" },
     { id: 3, titulo: "Top 5 Juegos de Mesa para la comunidad", autor: "Admin", fecha: "01/10/2025" },
   ];
-  
-  // Link de WhatsApp simulado (Servicio de soporte técnico)
+
   const whatsappLink = "https://wa.me/56912345678?text=Hola%20necesito%20soporte%20t%C3%A9cnico%20con%20mi%20equipo.";
 
   return (
@@ -69,7 +67,6 @@ const ComunidadSoporte: React.FC = () => {
   );
 };
 
-// Estilos internos
 const containerStyle: React.CSSProperties = {
   maxWidth: '1200px',
   margin: '50px auto',

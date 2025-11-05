@@ -1,19 +1,14 @@
 /* src/index.css */
 
-/* Importar las fuentes de Google Fonts (Roboto y Orbitron) */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@100;400;700&display=swap');
 
-/* Estilos Globales basados en el caso de Level-Up Gamer */
 :root {
-  /* Tipografía: Roboto como fuente principal y Orbitron para acentos */
   font-family: 'Roboto', sans-serif;
   
-  /* Colores de Texto y Fondo según el caso */
-  color: #FFFFFF; /* Texto Principal: Blanco */
-  background-color: #000000; /* Fondo Principal: Negro */
+  color: #FFFFFF;
+  background-color: #000000;
 }
 
-/* Aplicar el fondo al body */
 body {
   margin: 0;
   min-height: 100vh;
