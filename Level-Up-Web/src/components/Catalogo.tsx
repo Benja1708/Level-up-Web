@@ -92,7 +92,7 @@ const productosGridStyle: React.CSSProperties = {
 
 const cardStyle: React.CSSProperties = {
   padding: '15px',
-  border: '1px solid #1E90FF', // Borde Azul Eléctrico
+  border: '1px solid #1E90FF',
   borderRadius: '8px',
   backgroundColor: '#111', 
 };
@@ -101,7 +101,7 @@ const buttonStyle: React.CSSProperties = {
   padding: '8px 15px',
   borderRadius: '4px',
   border: 'none',
-  backgroundColor: '#1E90FF', // Azul Eléctrico
+  backgroundColor: '#1E90FF',
   color: '#000000', 
   fontWeight: 'bold',
   cursor: 'pointer',
