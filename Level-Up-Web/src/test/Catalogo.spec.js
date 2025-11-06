@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
 import Catalogo from '../components/Catalogo';
+import {describe, it, expect, beforeEach, vi} from 'vitest';
 
 describe('Catalogo Component', () => {
   // Mock de la función onAgregarAlCarrito
-  const mockOnAgregarAlCarrito = jasmine.createSpy('onAgregarAlCarrito');
+  const mockOnAgregarAlCarrito = vi.fn();
 
   beforeEach(() => {
-    mockOnAgregarAlCarrito.calls.reset();
+   mockOnAgregarAlCarrito.mockClear();
   });
 
   it('should render the catalog title', () => {

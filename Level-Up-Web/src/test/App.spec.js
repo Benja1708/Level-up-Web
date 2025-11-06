@@ -1,5 +1,6 @@
-import { App } from '../components/App';
-import { createSpyObj } from 'jasmine-core';
+import { render, screen }  from '@testing-library/react';
+import App from '../App';
+import { describe, it, expect } from 'vitest';
 
 describe('App Component', () => {
     let component;
@@ -26,3 +27,8 @@ describe('App Component', () => {
         expect(component.data).toEqual(mockData);
     });
 });
+    it('should render the main title', () => {
+        render(<App />);
+        const titleElement = screen.getByText(/LEVEL-UP GAMER/i);
+        expect(titleElement).toBeInTheDocument();
+    });

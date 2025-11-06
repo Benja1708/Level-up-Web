@@ -1,12 +1,12 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import ComunidadSoporte from '../components/ComunidadSoporte';
 
+import ComunidadSoporte from '../components/ComunidadSoporte';
+import '@testing-library/jest-dom';
 describe('ComunidadSoporte Component', () => {
   // Mock de window.alert
   beforeEach(() => {
-    global.alert = jasmine.createSpy('alert');
+   global.alert = vn.fn();
   });
 
   it('should render the component title', () => {

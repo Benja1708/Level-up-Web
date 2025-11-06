@@ -1,10 +1,16 @@
-import { Carrito } from '../components/Carrito';
 
+import { describe, it, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import Carrito from '../components/Carrito';
 describe('Carrito Component', () => {
     let component;
 
     beforeEach(() => {
         // Configuración del mock
+        it('debería mostrar el título del carrito', () => {
+    render(<Carrito carrito={[]} onModificarCantidad={() => {}} />);
+    expect(screen.getByText('🛒 Carrito de Compras')).toBeInTheDocument();
+  });
         component = new Carrito();
     });
 
