@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 describe('ComunidadSoporte Component', () => {
   // Mock de window.alert
   beforeEach(() => {
-   global.alert = vn.fn();
+  global.alert = vi.fn();
   });
 
   it('should render the component title', () => {
