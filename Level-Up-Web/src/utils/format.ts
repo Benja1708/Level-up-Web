@@ -11,8 +11,12 @@ export const DESIGN_COLORS = {
 
 export const cleanCurrencyToNumber = (priceString: string): number => {
   if (!priceString) return 0;
-  
-  const cleanString = priceString.replace('$', '').replace(/./g, '').replace(' CLP', '');
+  const cleanString = priceString
+    .replace('$', '')
+    .replace(/\./g, '') // eliminar separadores de miles
+    .replace(' CLP', '')
+    .trim();
+
   return parseInt(cleanString, 10) || 0;
 };
 
