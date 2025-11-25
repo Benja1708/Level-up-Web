@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { LayoutDashboard, Package, ShoppingBag, Users, Settings, Search, Edit2, Trash2, ChevronDown, PlusCircle, Star, TrendingUp, DollarSign, Gift, CheckCircle, XCircle } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingBag, Users, Settings, Search, Edit2, Trash2, ChevronDown, PlusCircle, Star, TrendingUp, DollarSign, CheckCircle } from 'lucide-react';
 
 
 interface Product {

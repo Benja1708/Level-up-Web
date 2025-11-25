@@ -41,7 +41,7 @@ describe('App Component', () => {
 
 
 // --- 2. PRUEBAS DE FUNCIONALIDAD DEL REGISTRO (Registro.tsx) ---
-describe('Registro Component', () => {
+describe ('Registro Component'), () => 
 
     it('should show an error message if the user is under 18', async () => {
         // Inicializamos el user event para simular interacciones del usuario
